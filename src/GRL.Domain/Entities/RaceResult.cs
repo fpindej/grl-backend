@@ -1,0 +1,51 @@
+﻿namespace GRL.Domain.Entities;
+
+public class RaceResult
+{
+    public int RaceResultId { get; }
+    public Race Race { get; }
+    public Driver Driver { get; }
+    public Team Team { get; }
+    public int Position { get; private set; }
+    public int PointsAwarded { get; private set; }
+    public TimeSpan TotalTime { get; private set; } // Includes penalties
+
+    private readonly List<Penalty> _penalties = new();
+    public IReadOnlyCollection<Penalty> Penalties => _penalties.AsReadOnly();
+
+    public RaceResult(int raceResultId, Race race, Driver driver, Team team, int position, int pointsAwarded,
+        TimeSpan totalTime)
+    {
+        RaceResultId = raceResultId;
+        Race = race ?? throw new ArgumentNullException(nameof(race));
+        Driver = driver ?? throw new ArgumentNullException(nameof(driver));
+        Team = team ?? throw new ArgumentNullException(nameof(team));
+        Position = position;
+        PointsAwarded = pointsAwarded;
+        TotalTime = totalTime;
+    }
+
+    public void AddPenalty(Penalty penalty)
+    {
+        if (penalty == null) throw new ArgumentNullException(nameof(penalty));
+        _penalties.Add(penalty);
+
+        // Recalculate race results after applying the penalty
+        Race.RecalculateResults();
+    }
+
+    public void AddTimePenalty(TimeSpan timePenalty)
+    {
+        TotalTime += timePenalty;
+    }
+
+    public void DeductPoints(int points)
+    {
+        PointsAwarded = Math.Max(val1: 0, PointsAwarded - points);
+    }
+
+    public void SetPosition(int newPosition)
+    {
+        Position = newPosition;
+    }
+}
