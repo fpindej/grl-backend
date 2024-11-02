@@ -1,5 +1,4 @@
 ﻿using System.ComponentModel;
-using GRL.Api.Dtos;
 using GRL.Application.Services;
 
 namespace GRL.Api.Controllers;
@@ -11,20 +10,24 @@ using Microsoft.AspNetCore.Mvc;
 public class CalendarController : ControllerBase
 {
     private readonly ICalendarService _calendarService;
+    private readonly ILogger<CalendarController> _logger;
 
-    public CalendarController(ICalendarService calendarService)
+    public CalendarController(ICalendarService calendarService, ILogger<CalendarController> logger)
     {
         _calendarService = calendarService;
+        _logger = logger;
     }
 
     [HttpGet("{league}/{season?}")]
     public async Task<IActionResult> GetCalendar(string league = "Main", string season = "2024/25")
     {
         season = Uri.UnescapeDataString(season);
+        _logger.LogInformation("Getting calendar for {leagueName} league in season {season}.", league, season);
         var races = await _calendarService.GetCalendarAsync(league, season);
 
         if (!races.Any())
         {
+            _logger.LogWarning("Couldn't find calendar for {leagueName} league in season {season}.", league, season);
             return NotFound($"Couldn't find calendar for {league} league in season {season}.");
         }
 

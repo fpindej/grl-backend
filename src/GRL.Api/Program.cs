@@ -1,8 +1,13 @@
+using Serilog;
 using GRL.Infrastructure.Extensions;
 using GRL.Persistence.Extensions;
 using Microsoft.AspNetCore.HttpOverrides;
 
+var environmentName = Environment.GetEnvironmentVariable("ASPNETCORE_ENVIRONMENT");
+GRL.Logging.LoggerConfigurationExtensions.SetupLogger(environmentName);
+
 var builder = WebApplication.CreateBuilder(args);
+builder.Host.UseSerilog();
 
 // Add services to the container.
 builder.Services.AddPersistence(builder.Configuration);

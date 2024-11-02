@@ -13,6 +13,7 @@
 
     <ItemGroup>
       <ProjectReference Include="..\GRL.Infrastructure\GRL.Infrastructure.csproj" />
+      <ProjectReference Include="..\GRL.Logging\GRL.Logging.csproj" />
       <ProjectReference Include="..\GRL.Persistence\GRL.Persistence.csproj" />
     </ItemGroup>
 
