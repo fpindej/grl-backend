@@ -5,10 +5,10 @@ public class League
     public int LeagueId { get; }
     public string Name { get; }
 
-    private readonly List<Team> _teams = new();
+    private readonly List<Team> _teams = [];
     public IReadOnlyCollection<Team> Teams => _teams.AsReadOnly();
 
-    private readonly List<Season> _seasons = new();
+    private readonly List<Season> _seasons = [];
     public IReadOnlyCollection<Season> Seasons => _seasons.AsReadOnly();
 
     public League(int leagueId, string name)

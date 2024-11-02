@@ -8,7 +8,7 @@ public class Race
     public Circuit Circuit { get; }
     public Season Season { get; }
 
-    private readonly List<RaceResult> _raceResults = new();
+    private readonly List<RaceResult> _raceResults = [];
     public IReadOnlyCollection<RaceResult> RaceResults => _raceResults.AsReadOnly();
 
     public Race(int raceId, int round, DateTime date, Circuit circuit, Season season)

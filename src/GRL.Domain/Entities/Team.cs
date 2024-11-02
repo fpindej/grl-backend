@@ -5,7 +5,7 @@ public class Team
     public int TeamId { get; }
     public string Name { get; }
 
-    private readonly List<Driver> _drivers = new();
+    private readonly List<Driver> _drivers = [];
     public IReadOnlyCollection<Driver> Drivers => _drivers.AsReadOnly();
 
     public Team(int teamId, string name)

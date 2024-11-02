@@ -4,10 +4,10 @@ public class Driver
 {
     public int DriverId { get; }
     public string Name { get; }
-    public int PenaltyPoints { get; private set; } // Accumulated penalty points
+    public int PenaltyPoints { get; private set; }
 
-    private readonly List<League> _reserveLeagues = new();
-    public IReadOnlyCollection<League> ReserveLeagues => _reserveLeagues.AsReadOnly();
+    private readonly List<DriverTeamAssignment> _teamAssignments = [];
+    public IReadOnlyCollection<DriverTeamAssignment> TeamAssignments => _teamAssignments.AsReadOnly();
 
     public Driver(int driverId, string name)
     {
@@ -16,19 +16,25 @@ public class Driver
         PenaltyPoints = 0;
     }
 
-    public void AddReserveLeague(League league)
+    public void AddTeamAssignment(DriverTeamAssignment assignment)
     {
-        if (league == null) throw new ArgumentNullException(nameof(league));
+        if (assignment == null) throw new ArgumentNullException(nameof(assignment));
 
-        if (_reserveLeagues.Any(l => l.LeagueId == league.LeagueId))
-            throw new InvalidOperationException("Driver is already a reserve driver in this league.");
+        if (_teamAssignments.Any(a => a.IsActiveOn(assignment.StartDate) ||
+                                      (assignment.EndDate.HasValue && a.IsActiveOn(assignment.EndDate.Value))))
+            throw new InvalidOperationException("Driver already has an assignment during this period.");
 
-        _reserveLeagues.Add(league);
+        _teamAssignments.Add(assignment);
+    }
+
+    public Team? GetTeamAtDate(DateTime date)
+    {
+        var assignment = _teamAssignments.FirstOrDefault(a => a.IsActiveOn(date));
+        return assignment?.Team;
     }
 
     public void AddPenaltyPoints(int points)
     {
         PenaltyPoints += points;
-        // Implement logic for qualification or race bans if needed
     }
 }

@@ -5,26 +5,27 @@ public class RaceResult
     public int RaceResultId { get; }
     public Race Race { get; }
     public Driver Driver { get; }
-    public Team Team { get; }
+    public Team Team { get; } // Determined based on assignment
     public int Position { get; private set; }
     public int PointsAwarded { get; private set; }
-    public TimeSpan TotalTime { get; private set; } // Includes penalties
-
-    private readonly List<Penalty> _penalties = new();
+    public TimeSpan TotalTime { get; private set; }
+    
+    private readonly List<Penalty> _penalties = [];
     public IReadOnlyCollection<Penalty> Penalties => _penalties.AsReadOnly();
 
-    public RaceResult(int raceResultId, Race race, Driver driver, Team team, int position, int pointsAwarded,
-        TimeSpan totalTime)
+
+    public RaceResult(int raceResultId, Race race, Driver driver, int position, int pointsAwarded, TimeSpan totalTime)
     {
         RaceResultId = raceResultId;
         Race = race ?? throw new ArgumentNullException(nameof(race));
         Driver = driver ?? throw new ArgumentNullException(nameof(driver));
-        Team = team ?? throw new ArgumentNullException(nameof(team));
         Position = position;
         PointsAwarded = pointsAwarded;
         TotalTime = totalTime;
-    }
 
+        Team = driver.GetTeamAtDate(race.Date) ?? throw new InvalidOperationException("Driver is not assigned to any team on the race date.");
+    }
+    
     public void AddPenalty(Penalty penalty)
     {
         if (penalty == null) throw new ArgumentNullException(nameof(penalty));

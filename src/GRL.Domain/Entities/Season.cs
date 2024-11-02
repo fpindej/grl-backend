@@ -5,7 +5,7 @@ public class Season
     public int SeasonId { get; }
     public string Name { get; }
 
-    private readonly List<Race> _races = new();
+    private readonly List<Race> _races = [];
     public IReadOnlyCollection<Race> Races => _races.AsReadOnly();
 
     public Season(int seasonId, string name)
