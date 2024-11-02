@@ -2,15 +2,15 @@
 
 public class Season
 {
-    public int SeasonId { get; }
+    public int Id { get; }
     public string Name { get; }
 
     private readonly List<Race> _races = [];
     public IReadOnlyCollection<Race> Races => _races.AsReadOnly();
 
-    public Season(int seasonId, string name)
+    public Season(int id, string name)
     {
-        SeasonId = seasonId;
+        Id = id;
         Name = name ?? throw new ArgumentNullException(nameof(name));
     }
 

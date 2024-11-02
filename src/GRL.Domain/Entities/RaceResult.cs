@@ -2,7 +2,7 @@
 
 public class RaceResult
 {
-    public int RaceResultId { get; }
+    public int Id { get; }
     public Race Race { get; }
     public Driver Driver { get; }
     public Team Team { get; } // Determined based on assignment
@@ -14,9 +14,9 @@ public class RaceResult
     public IReadOnlyCollection<Penalty> Penalties => _penalties.AsReadOnly();
 
 
-    public RaceResult(int raceResultId, Race race, Driver driver, int position, int pointsAwarded, TimeSpan totalTime)
+    public RaceResult(int id, Race race, Driver driver, int position, int pointsAwarded, TimeSpan totalTime)
     {
-        RaceResultId = raceResultId;
+        Id = id;
         Race = race ?? throw new ArgumentNullException(nameof(race));
         Driver = driver ?? throw new ArgumentNullException(nameof(driver));
         Position = position;

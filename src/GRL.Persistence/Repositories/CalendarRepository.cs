@@ -32,16 +32,16 @@ internal class CalendarRepository : ICalendarRepository
     private static Race ToDomain(Models.Race race)
     {
         var circuit = new Circuit(
-            circuitId: race.Circuit.Id,
+            id: race.Circuit.Id,
             name: race.Circuit.Country,
             location: race.Circuit.Location);
 
         var season = new Season(
-            seasonId: race.Season.Id,
+            id: race.Season.Id,
             name: race.Season.Name);
 
         var domainRace = new Race(
-            raceId: race.Id,
+            id: race.Id,
             round: race.Round,
             date: race.Date,
             circuit: circuit,

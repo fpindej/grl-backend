@@ -2,16 +2,16 @@
 
 public class Driver
 {
-    public int DriverId { get; }
+    public int Id { get; }
     public string Name { get; }
     public int PenaltyPoints { get; private set; }
 
     private readonly List<DriverTeamAssignment> _teamAssignments = [];
     public IReadOnlyCollection<DriverTeamAssignment> TeamAssignments => _teamAssignments.AsReadOnly();
 
-    public Driver(int driverId, string name)
+    public Driver(int id, string name)
     {
-        DriverId = driverId;
+        Id = id;
         Name = name ?? throw new ArgumentNullException(nameof(name));
         PenaltyPoints = 0;
     }

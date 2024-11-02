@@ -2,13 +2,13 @@
 
 public class Circuit
 {
-    public int CircuitId { get; }
+    public int Id { get; }
     public string Country { get; }
     public string Location { get; }
 
-    public Circuit(int circuitId, string name, string location)
+    public Circuit(int id, string name, string location)
     {
-        CircuitId = circuitId;
+        Id = id;
         Country = name ?? throw new ArgumentNullException(nameof(name));
         Location = location ?? throw new ArgumentNullException(nameof(location));
     }

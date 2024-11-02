@@ -2,7 +2,7 @@
 
 public class Race
 {
-    public int RaceId { get; }
+    public int Id { get; }
     public int Round { get; }
     public DateTime Date { get; }
     public Circuit Circuit { get; }
@@ -11,9 +11,9 @@ public class Race
     private readonly List<RaceResult> _raceResults = [];
     public IReadOnlyCollection<RaceResult> RaceResults => _raceResults.AsReadOnly();
 
-    public Race(int raceId, int round, DateTime date, Circuit circuit, Season season)
+    public Race(int id, int round, DateTime date, Circuit circuit, Season season)
     {
-        RaceId = raceId;
+        Id = id;
         Round = round;
         Date = date;
         Circuit = circuit ?? throw new ArgumentNullException(nameof(circuit));
@@ -25,7 +25,7 @@ public class Race
         if (raceResult == null) throw new ArgumentNullException(nameof(raceResult));
 
         // Business rule: A driver cannot have more than one result in the same race.
-        if (_raceResults.Any(rr => rr.Driver.DriverId == raceResult.Driver.DriverId))
+        if (_raceResults.Any(rr => rr.Driver.Id == raceResult.Driver.Id))
             throw new InvalidOperationException("Driver already has a result for this race.");
 
         _raceResults.Add(raceResult);

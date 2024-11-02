@@ -2,15 +2,15 @@
 
 public class DriverTeamAssignment
 {
-    public int AssignmentId { get; }
+    public int Id { get; }
     public Driver Driver { get; }
     public Team Team { get; }
     public DateTime StartDate { get; }
     public DateTime? EndDate { get; private set; } // Null means current assignment
 
-    public DriverTeamAssignment(int assignmentId, Driver driver, Team team, DateTime startDate, DateTime? endDate = null)
+    public DriverTeamAssignment(int id, Driver driver, Team team, DateTime startDate, DateTime? endDate = null)
     {
-        AssignmentId = assignmentId;
+        Id = id;
         Driver = driver ?? throw new ArgumentNullException(nameof(driver));
         Team = team ?? throw new ArgumentNullException(nameof(team));
         StartDate = startDate;

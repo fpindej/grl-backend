@@ -2,7 +2,7 @@
 
 public class League
 {
-    public int LeagueId { get; }
+    public int Id { get; }
     public string Name { get; }
 
     private readonly List<Team> _teams = [];
@@ -11,9 +11,9 @@ public class League
     private readonly List<Season> _seasons = [];
     public IReadOnlyCollection<Season> Seasons => _seasons.AsReadOnly();
 
-    public League(int leagueId, string name)
+    public League(int id, string name)
     {
-        LeagueId = leagueId;
+        Id = id;
         Name = name ?? throw new ArgumentNullException(nameof(name));
     }
 
@@ -33,7 +33,7 @@ public class League
         if (season == null) throw new ArgumentNullException(nameof(season));
 
         // Ensure no duplicate seasons
-        if (_seasons.Any(s => s.SeasonId == season.SeasonId))
+        if (_seasons.Any(s => s.Id == season.Id))
             throw new InvalidOperationException("Season already exists in the league.");
 
         _seasons.Add(season);

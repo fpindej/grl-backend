@@ -2,7 +2,7 @@
 
 public class Penalty
 {
-    public int PenaltyId { get; }
+    public int Id { get; }
     public PenaltyType Type { get; }
     public string Reason { get; }
     public TimeSpan? TimePenalty { get; }
@@ -10,10 +10,10 @@ public class Penalty
     public DateTime AppliedOn { get; }
     public RaceResult RaceResult { get; }
 
-    public Penalty(int penaltyId, PenaltyType type, string reason, RaceResult raceResult, TimeSpan? timePenalty = null,
+    public Penalty(int id, PenaltyType type, string reason, RaceResult raceResult, TimeSpan? timePenalty = null,
         int? pointsDeduction = null)
     {
-        PenaltyId = penaltyId;
+        Id = id;
         Type = type;
         Reason = reason ?? throw new ArgumentNullException(nameof(reason));
         RaceResult = raceResult ?? throw new ArgumentNullException(nameof(raceResult));

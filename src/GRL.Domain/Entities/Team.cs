@@ -2,15 +2,15 @@
 
 public class Team
 {
-    public int TeamId { get; }
+    public int Id { get; }
     public string Name { get; }
 
     private readonly List<Driver> _drivers = [];
     public IReadOnlyCollection<Driver> Drivers => _drivers.AsReadOnly();
 
-    public Team(int teamId, string name)
+    public Team(int id, string name)
     {
-        TeamId = teamId;
+        Id = id;
         Name = name ?? throw new ArgumentNullException(nameof(name));
     }
 
