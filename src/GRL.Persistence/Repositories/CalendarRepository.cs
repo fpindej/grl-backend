@@ -1,9 +1,10 @@
-﻿using GRL.Persistence.Models;
+﻿using GRL.Domain.Entities;
+using GRL.Domain.Repositories;
 using Microsoft.EntityFrameworkCore;
 
 namespace GRL.Persistence.Repositories;
 
-public class CalendarRepository
+internal class CalendarRepository : ICalendarRepository
 {
     private readonly GrlDbContext _context;
 
@@ -12,15 +13,40 @@ public class CalendarRepository
         _context = context;
     }
 
-    public async Task<List<Race>> GetCalendarAsync(string leagueName, string seasonName)
+    public async Task<IEnumerable<Race>> GetCalendarAsync(string leagueName, string seasonName)
     {
-        return await _context.Races
+        var races = await _context.Races
             .Include(r => r.Circuit)
-            .Include(r => r.League)
             .Include(r => r.Season)
-            .Where(r => r.League.Name.Equals(leagueName, StringComparison.OrdinalIgnoreCase)
-                        && r.Season.Name.Equals(seasonName, StringComparison.OrdinalIgnoreCase))
+            .ThenInclude(s => s.League)
+            .Where(r => EF.Functions.ILike(r.Season.League.Name, leagueName)
+                        && EF.Functions.ILike(r.Season.Name, seasonName))
             .OrderBy(r => r.Round)
             .ToListAsync();
+
+        var domainRaces = races.Select(ToDomain).ToList();
+
+        return domainRaces;
+    }
+
+    private static Race ToDomain(Models.Race race)
+    {
+        var circuit = new Circuit(
+            circuitId: race.Circuit.Id,
+            name: race.Circuit.Country,
+            location: race.Circuit.Location);
+
+        var season = new Season(
+            seasonId: race.Season.Id,
+            name: race.Season.Name);
+
+        var domainRace = new Race(
+            raceId: race.Id,
+            round: race.Round,
+            date: race.Date,
+            circuit: circuit,
+            season: season);
+
+        return domainRace;
     }
 }

@@ -1,4 +1,5 @@
-﻿using GRL.Persistence.Repositories;
+﻿using GRL.Domain.Repositories;
+using GRL.Persistence.Repositories;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
@@ -15,7 +16,7 @@ public static class ServiceCollectionExtensions
             opt.UseNpgsql(connectionString);
         });
 
-        services.AddScoped<CalendarRepository>();
+        services.AddScoped<ICalendarRepository, CalendarRepository>();
 
         return services;
     }
