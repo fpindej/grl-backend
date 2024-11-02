@@ -1,190 +1,73 @@
-﻿using GRL.Api.Dtos;
+﻿using System.ComponentModel;
+using GRL.Api.Dtos;
+using GRL.Application.Services;
 
 namespace GRL.Api.Controllers;
 
 using Microsoft.AspNetCore.Mvc;
-using System;
 
 [Route("api/[controller]")]
 [ApiController]
 public class CalendarController : ControllerBase
 {
-    [HttpGet("{leagueName}")]
-    public IActionResult GetCalendar(string leagueName)
+    private readonly ICalendarService _calendarService;
+
+    public CalendarController(ICalendarService calendarService)
     {
-        var calendarResponse = leagueName.ToLower() switch
-        {
-            "rookie" => GetRookieCalendar(),
-            "junior" => GetJuniorCalendar(),
-            "talent" => GetTalentCalendar(),
-            "academy" => GetAcademyCalendar(),
-            "main" => GetMainCalendar(),
-            _ => null
-        };
-
-        if (calendarResponse is null)
-            return NotFound($"Couldn't find calendar for {leagueName} league.");
-
-        return Ok(calendarResponse);
+        _calendarService = calendarService;
     }
 
-    private CalendarResponse GetRookieCalendar()
+    [HttpGet("{league}/{season?}")]
+    public async Task<IActionResult> GetCalendar(string league = "Main", string season = "2024/25")
     {
-        return new CalendarResponse
-        {
-            League = "Rookie",
-            Season = "2024/25",
-            Races =
-            [
-                new Race(Round: 1, RaceLocations.Bahrain, new DateTime(year: 2024, month: 10, day: 2)),
-                new Race(Round: 2, RaceLocations.UnitedStatesLasVegas, new DateTime(year: 2024, month: 10, day: 9)),
-                new Race(Round: 3, RaceLocations.Australia, new DateTime(year: 2024, month: 10, day: 23)),
-                new Race(Round: 4, RaceLocations.Portugal, new DateTime(year: 2024, month: 10, day: 30)),
-                new Race(Round: 5, RaceLocations.UnitedStatesMiami, new DateTime(year: 2024, month: 11, day: 13)),
-                new Race(Round: 6, RaceLocations.Canada, new DateTime(year: 2024, month: 11, day: 20)),
-                new Race(Round: 7, RaceLocations.ItalyImola, new DateTime(year: 2024, month: 12, day: 4)),
-                new Race(Round: 8, RaceLocations.Spain, new DateTime(year: 2024, month: 12, day: 11)),
-                new Race(Round: 9, RaceLocations.Austria, new DateTime(year: 2025, month: 1, day: 15)),
-                new Race(Round: 10, RaceLocations.GreatBritain, new DateTime(year: 2025, month: 1, day: 22)),
-                new Race(Round: 11, RaceLocations.Hungary, new DateTime(year: 2025, month: 2, day: 5)),
-                new Race(Round: 12, RaceLocations.Belgium, new DateTime(year: 2025, month: 2, day: 12)),
-                new Race(Round: 13, RaceLocations.Netherlands, new DateTime(year: 2025, month: 2, day: 26)),
-                new Race(Round: 14, RaceLocations.ItalyMonza, new DateTime(year: 2025, month: 3, day: 5)),
-                new Race(Round: 15, RaceLocations.Mexico, new DateTime(year: 2025, month: 3, day: 19)),
-                new Race(Round: 16, RaceLocations.Singapore, new DateTime(year: 2025, month: 3, day: 26)),
-                new Race(Round: 17, RaceLocations.UnitedStatesAustin, new DateTime(year: 2025, month: 4, day: 9)),
-                new Race(Round: 18, RaceLocations.Brazil, new DateTime(year: 2025, month: 4, day: 16)),
-                new Race(Round: 19, RaceLocations.Qatar, new DateTime(year: 2025, month: 4, day: 30)),
-                new Race(Round: 20, RaceLocations.AbuDhabi, new DateTime(year: 2025, month: 5, day: 7))
-            ]
-        };
-    }
+        season = Uri.UnescapeDataString(season);
+        var races = await _calendarService.GetCalendarAsync(league, season);
 
-    private CalendarResponse GetJuniorCalendar()
-    {
-        return new CalendarResponse
+        if (!races.Any())
         {
-            League = "Junior",
-            Season = "2024/25",
-            Races =
-            [
-                new Race(Round: 1, RaceLocations.Bahrain, new DateTime(year: 2024, month: 10, day: 8)),
-                new Race(Round: 2, RaceLocations.Japan, new DateTime(year: 2024, month: 10, day: 15)),
-                new Race(Round: 3, RaceLocations.Australia, new DateTime(year: 2024, month: 10, day: 29)),
-                new Race(Round: 4, RaceLocations.Portugal, new DateTime(year: 2024, month: 11, day: 5)),
-                new Race(Round: 5, RaceLocations.Monaco, new DateTime(year: 2024, month: 11, day: 19)),
-                new Race(Round: 6, RaceLocations.Canada, new DateTime(year: 2024, month: 11, day: 26)),
-                new Race(Round: 7, RaceLocations.ItalyImola, new DateTime(year: 2024, month: 12, day: 10)),
-                new Race(Round: 8, RaceLocations.Spain, new DateTime(year: 2024, month: 12, day: 17)),
-                new Race(Round: 9, RaceLocations.Austria, new DateTime(year: 2025, month: 1, day: 7)),
-                new Race(Round: 10, RaceLocations.GreatBritain, new DateTime(year: 2025, month: 1, day: 14)),
-                new Race(Round: 11, RaceLocations.Hungary, new DateTime(year: 2025, month: 1, day: 28)),
-                new Race(Round: 12, RaceLocations.Belgium, new DateTime(year: 2025, month: 2, day: 4)),
-                new Race(Round: 13, RaceLocations.Netherlands, new DateTime(year: 2025, month: 2, day: 18)),
-                new Race(Round: 14, RaceLocations.ItalyMonza, new DateTime(year: 2025, month: 2, day: 25)),
-                new Race(Round: 15, RaceLocations.Mexico, new DateTime(year: 2025, month: 3, day: 11)),
-                new Race(Round: 16, RaceLocations.Singapore, new DateTime(year: 2025, month: 3, day: 18)),
-                new Race(Round: 17, RaceLocations.China, new DateTime(year: 2025, month: 4, day: 1)),
-                new Race(Round: 18, RaceLocations.Brazil, new DateTime(year: 2025, month: 4, day: 8)),
-                new Race(Round: 19, RaceLocations.Qatar, new DateTime(year: 2025, month: 4, day: 29)),
-                new Race(Round: 20, RaceLocations.AbuDhabi, new DateTime(year: 2025, month: 6, day: 5))
-            ]
-        };
-    }
-    
-    private CalendarResponse GetTalentCalendar()
-    {
-        return new CalendarResponse
-        {
-            League = "Talent",
-            Season = "2024/25",
-            Races =
-            [
-                new Race(Round: 1, RaceLocations.Bahrain, new DateTime(year: 2024, month: 10, day: 5)),
-                new Race(Round: 2, RaceLocations.SaudiArabia, new DateTime(year: 2024, month: 10, day: 12)),
-                new Race(Round: 3, RaceLocations.Australia, new DateTime(year: 2024, month: 10, day: 26)),
-                new Race(Round: 4, RaceLocations.Japan, new DateTime(year: 2024, month: 11, day: 9)),
-                new Race(Round: 5, RaceLocations.UnitedStatesMiami, new DateTime(year: 2024, month: 11, day: 16)),
-                new Race(Round: 6, RaceLocations.Canada, new DateTime(year: 2024, month: 11, day: 23)),
-                new Race(Round: 7, RaceLocations.ItalyImola, new DateTime(year: 2024, month: 12, day: 7)),
-                new Race(Round: 8, RaceLocations.Spain, new DateTime(year: 2024, month: 12, day: 14)),
-                new Race(Round: 9, RaceLocations.Austria, new DateTime(year: 2025, month: 1, day: 11)),
-                new Race(Round: 10, RaceLocations.GreatBritain, new DateTime(year: 2025, month: 1, day: 18)),
-                new Race(Round: 11, RaceLocations.Hungary, new DateTime(year: 2025, month: 2, day: 1)),
-                new Race(Round: 12, RaceLocations.Belgium, new DateTime(year: 2025, month: 2, day: 8)),
-                new Race(Round: 13, RaceLocations.Netherlands, new DateTime(year: 2025, month: 2, day: 22)),
-                new Race(Round: 14, RaceLocations.ItalyMonza, new DateTime(year: 2025, month: 3, day: 1)),
-                new Race(Round: 15, RaceLocations.Azerbaijan, new DateTime(year: 2025, month: 3, day: 15)),
-                new Race(Round: 16, RaceLocations.Singapore, new DateTime(year: 2025, month: 3, day: 22)),
-                new Race(Round: 17, RaceLocations.China, new DateTime(year: 2025, month: 4, day: 5)),
-                new Race(Round: 18, RaceLocations.Brazil, new DateTime(year: 2025, month: 4, day: 12)),
-                new Race(Round: 19, RaceLocations.Qatar, new DateTime(year: 2025, month: 4, day: 26)),
-                new Race(Round: 20, RaceLocations.AbuDhabi, new DateTime(year: 2025, month: 5, day: 10))
-            ]
-        };
-    }
+            return NotFound($"Couldn't find calendar for {league} league in season {season}.");
+        }
 
-    private CalendarResponse GetAcademyCalendar()
-    {
-        return new CalendarResponse
+        var response = new CalendarResponse
         {
-            League = "Academy",
-            Season = "2024/25",
-            Races =
-            [
-                new Race(Round: 1, RaceLocations.Australia, new DateTime(year: 2024, month: 9, day: 30)),
-                new Race(Round: 2, RaceLocations.ItalyImola, new DateTime(year: 2024, month: 10, day: 14)),
-                new Race(Round: 3, RaceLocations.UnitedStatesAustin, new DateTime(year: 2024, month: 10, day: 21)),
-                new Race(Round: 4, RaceLocations.Mexico, new DateTime(year: 2024, month: 11, day: 4)),
-                new Race(Round: 5, RaceLocations.Canada, new DateTime(year: 2024, month: 11, day: 11)),
-                new Race(Round: 6, RaceLocations.Spain, new DateTime(year: 2024, month: 11, day: 25)),
-                new Race(Round: 7, RaceLocations.Qatar, new DateTime(year: 2024, month: 12, day: 2)),
-                new Race(Round: 8, RaceLocations.Austria, new DateTime(year: 2024, month: 12, day: 16)),
-                new Race(Round: 9, RaceLocations.GreatBritain, new DateTime(year: 2025, month: 1, day: 6)),
-                new Race(Round: 10, RaceLocations.Hungary, new DateTime(year: 2025, month: 1, day: 13)),
-                new Race(Round: 11, RaceLocations.Belgium, new DateTime(year: 2025, month: 1, day: 27)),
-                new Race(Round: 12, RaceLocations.Netherlands, new DateTime(year: 2025, month: 2, day: 3)),
-                new Race(Round: 13, RaceLocations.ItalyMonza, new DateTime(year: 2025, month: 2, day: 17)),
-                new Race(Round: 14, RaceLocations.Singapore, new DateTime(year: 2025, month: 2, day: 24)),
-                new Race(Round: 15, RaceLocations.AbuDhabi, new DateTime(year: 2025, month: 3, day: 10)),
-                new Race(Round: 16, RaceLocations.Monaco, new DateTime(year: 2025, month: 3, day: 17)),
-                new Race(Round: 17, RaceLocations.Japan, new DateTime(year: 2025, month: 3, day: 31)),
-                new Race(Round: 18, RaceLocations.Bahrain, new DateTime(year: 2025, month: 4, day: 14)),
-                new Race(Round: 19, RaceLocations.SaudiArabia, new DateTime(year: 2025, month: 4, day: 28)),
-                new Race(Round: 20, RaceLocations.Brazil, new DateTime(year: 2025, month: 5, day: 5))
-            ]
+            League = league,
+            Season = season,
+            Races = races.Select(r => new RaceDto
+            {
+                Round = r.Round,
+                Country = r.Circuit.Country,
+                Location = r.Circuit.Location,
+                Date = r.Date
+            }).ToList()
         };
-    }
 
-    private CalendarResponse GetMainCalendar()
-    {
-        return new CalendarResponse
-        {
-            League = "Main",
-            Season = "2024/25",
-            Races =
-            [
-                new Race(Round: 1, RaceLocations.Australia, new DateTime(year: 2024, month: 9, day: 29)),
-                new Race(Round: 2, RaceLocations.ItalyImola, new DateTime(year: 2024, month: 10, day: 13)),
-                new Race(Round: 3, RaceLocations.Mexico, new DateTime(year: 2024, month: 10, day: 27)),
-                new Race(Round: 4, RaceLocations.Canada, new DateTime(year: 2024, month: 11, day: 10)),
-                new Race(Round: 5, RaceLocations.Spain, new DateTime(year: 2024, month: 11, day: 17)),
-                new Race(Round: 6, RaceLocations.Qatar, new DateTime(year: 2024, month: 11, day: 24)),
-                new Race(Round: 7, RaceLocations.AbuDhabi, new DateTime(year: 2024, month: 12, day: 8)),
-                new Race(Round: 8, RaceLocations.Austria, new DateTime(year: 2024, month: 12, day: 15)),
-                new Race(Round: 9, RaceLocations.GreatBritain, new DateTime(year: 2025, month: 1, day: 5)),
-                new Race(Round: 10, RaceLocations.Hungary, new DateTime(year: 2025, month: 1, day: 12)),
-                new Race(Round: 11, RaceLocations.Belgium, new DateTime(year: 2025, month: 1, day: 26)),
-                new Race(Round: 12, RaceLocations.Netherlands, new DateTime(year: 2025, month: 2, day: 2)),
-                new Race(Round: 13, RaceLocations.ItalyMonza, new DateTime(year: 2025, month: 2, day: 16)),
-                new Race(Round: 14, RaceLocations.Singapore, new DateTime(year: 2025, month: 2, day: 23)),
-                new Race(Round: 15, RaceLocations.UnitedStatesAustin, new DateTime(year: 2025, month: 3, day: 9)),
-                new Race(Round: 16, RaceLocations.China, new DateTime(year: 2025, month: 3, day: 23)),
-                new Race(Round: 17, RaceLocations.Japan, new DateTime(year: 2025, month: 4, day: 6)),
-                new Race(Round: 18, RaceLocations.Bahrain, new DateTime(year: 2025, month: 4, day: 13)),
-                new Race(Round: 19, RaceLocations.SaudiArabia, new DateTime(year: 2025, month: 4, day: 27)),
-                new Race(Round: 20, RaceLocations.Brazil, new DateTime(year: 2025, month: 5, day: 11))
-            ]
-        };
+        return Ok(response);
     }
+}
+
+public class RaceDto
+{
+    [Description("The round number of the race in the season.")]
+    public int Round { get; set; }
+
+    [Description("Country of the circuit.")]
+    public string Country { get; set; } = null!;
+
+    [Description("Location of the circuit.")]
+    public string Location { get; set; } = null!;
+
+    [Description("Date of the race.")]
+    public DateTime Date { get; set; }
+}
+
+public class CalendarResponse
+{
+    [Description("Name of the league.")]
+    public string League { get; set; } = null!;
+
+    [Description("Name of the season.")]
+    public string Season { get; set; } = null!;
+
+    [Description("List of races in the calendar.")]
+    public List<RaceDto> Races { get; set; } = [];
 }
