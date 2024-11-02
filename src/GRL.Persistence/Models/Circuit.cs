@@ -5,19 +5,19 @@ using Microsoft.EntityFrameworkCore.Metadata.Builders;
 
 namespace GRL.Persistence.Models;
 
-public class Circuit : IEntityTypeConfiguration<Circuit>
+internal class Circuit : IEntityTypeConfiguration<Circuit>
 {
     [Key]
     [Description("Primary key for the Circuit entity.")]
-    public int CircuitId { get; set; }
+    public int Id { get; set; }
 
     [Required]
-    [MaxLength(length: 100)]
-    [Description("Name of the circuit.")]
-    public string Name { get; set; } = null!;
+    [MaxLength(100)]
+    [Description("Country of the circuit.")]
+    public string Country { get; set; } = null!;
 
     [Required]
-    [MaxLength(length: 100)]
+    [MaxLength(100)]
     [Description("Location of the circuit.")]
     public string Location { get; set; } = null!;
 
@@ -26,19 +26,22 @@ public class Circuit : IEntityTypeConfiguration<Circuit>
 
     public void Configure(EntityTypeBuilder<Circuit> builder)
     {
-        builder.HasKey(c => c.CircuitId);
+        builder.HasKey(c => c.Id);
 
-        builder.Property(c => c.Name)
+        builder.Property(c => c.Id)
+            .ValueGeneratedOnAdd();
+
+        builder.Property(c => c.Country)
             .IsRequired()
-            .HasMaxLength(maxLength: 100);
+            .HasMaxLength(100);
 
         builder.Property(c => c.Location)
             .IsRequired()
-            .HasMaxLength(maxLength: 100);
+            .HasMaxLength(100);
 
         builder.HasMany(c => c.Races)
             .WithOne(r => r.Circuit)
             .HasForeignKey(r => r.CircuitId)
-            .OnDelete(DeleteBehavior.Cascade);
+            .OnDelete(DeleteBehavior.Restrict);
     }
 }

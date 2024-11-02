@@ -5,31 +5,44 @@ using Microsoft.EntityFrameworkCore.Metadata.Builders;
 
 namespace GRL.Persistence.Models;
 
-public class League : IEntityTypeConfiguration<League>
+internal class League : IEntityTypeConfiguration<League>
 {
     [Key]
     [Description("Primary key for the League entity.")]
-    public int LeagueId { get; set; }
+    public int Id { get; set; }
 
     [Required]
-    [MaxLength(length: 50)]
+    [MaxLength(50)]
     [Description("Name of the league.")]
     public string Name { get; set; } = null!;
 
-    [Description("Collection of races associated with the league.")]
-    public virtual ICollection<Race> Races { get; set; } = new List<Race>();
+    // Navigation property to Seasons
+    [Description("Collection of seasons associated with the league.")]
+    public virtual ICollection<Season> Seasons { get; set; } = new List<Season>();
+
+    // Navigation property to Teams
+    [Description("Collection of teams in the league.")]
+    public virtual ICollection<Team> Teams { get; set; } = new List<Team>();
 
     public void Configure(EntityTypeBuilder<League> builder)
     {
-        builder.HasKey(l => l.LeagueId);
+        builder.HasKey(l => l.Id);
+        
+        builder.Property(d => d.Id)
+            .ValueGeneratedOnAdd();
 
         builder.Property(l => l.Name)
             .IsRequired()
-            .HasMaxLength(maxLength: 50);
+            .HasMaxLength(50);
 
-        builder.HasMany(l => l.Races)
-            .WithOne(r => r.League)
-            .HasForeignKey(r => r.LeagueId)
-            .OnDelete(DeleteBehavior.Cascade);
+        builder.HasMany(l => l.Seasons)
+            .WithOne(s => s.League)
+            .HasForeignKey(s => s.LeagueId)
+            .OnDelete(DeleteBehavior.Restrict);
+
+        builder.HasMany(l => l.Teams)
+            .WithOne(t => t.League)
+            .HasForeignKey(t => t.LeagueId)
+            .OnDelete(DeleteBehavior.Restrict);
     }
 }

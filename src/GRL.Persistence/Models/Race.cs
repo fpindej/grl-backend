@@ -6,11 +6,11 @@ using Microsoft.EntityFrameworkCore.Metadata.Builders;
 
 namespace GRL.Persistence.Models;
 
-public class Race : IEntityTypeConfiguration<Race>
+internal class Race : IEntityTypeConfiguration<Race>
 {
     [Key]
     [Description("Primary key for the Race entity.")]
-    public int RaceId { get; set; }
+    public int Id { get; set; }
 
     [Required]
     [Description("The round number of the race in the season.")]
@@ -21,13 +21,6 @@ public class Race : IEntityTypeConfiguration<Race>
     public DateTime Date { get; set; }
 
     // Foreign Keys
-
-    [ForeignKey(nameof(League))]
-    [Description("Foreign key to the League entity.")]
-    public int LeagueId { get; set; }
-
-    [Description("The league this race belongs to.")]
-    public virtual League League { get; set; } = null!;
 
     [ForeignKey(nameof(Season))]
     [Description("Foreign key to the Season entity.")]
@@ -43,9 +36,16 @@ public class Race : IEntityTypeConfiguration<Race>
     [Description("The circuit where this race is held.")]
     public virtual Circuit Circuit { get; set; } = null!;
 
+    // Navigation property to RaceResults
+    [Description("Collection of race results for this race.")]
+    public virtual ICollection<RaceResult> RaceResults { get; set; } = new List<RaceResult>();
+
     public void Configure(EntityTypeBuilder<Race> builder)
     {
-        builder.HasKey(r => r.RaceId);
+        builder.HasKey(r => r.Id);
+        
+        builder.Property(d => d.Id)
+            .ValueGeneratedOnAdd();
 
         builder.Property(r => r.Round)
             .IsRequired();
@@ -53,19 +53,19 @@ public class Race : IEntityTypeConfiguration<Race>
         builder.Property(r => r.Date)
             .IsRequired();
 
-        builder.HasOne(r => r.League)
-            .WithMany(l => l.Races)
-            .HasForeignKey(r => r.LeagueId)
-            .OnDelete(DeleteBehavior.Cascade);
-
         builder.HasOne(r => r.Season)
             .WithMany(s => s.Races)
             .HasForeignKey(r => r.SeasonId)
-            .OnDelete(DeleteBehavior.Cascade);
+            .OnDelete(DeleteBehavior.Restrict);
 
         builder.HasOne(r => r.Circuit)
             .WithMany(c => c.Races)
             .HasForeignKey(r => r.CircuitId)
-            .OnDelete(DeleteBehavior.Cascade);
+            .OnDelete(DeleteBehavior.Restrict);
+
+        builder.HasMany(r => r.RaceResults)
+            .WithOne(rr => rr.Race)
+            .HasForeignKey(rr => rr.RaceId)
+            .OnDelete(DeleteBehavior.Restrict);
     }
 }
