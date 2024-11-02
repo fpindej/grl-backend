@@ -1,15 +1,20 @@
+using GRL.Infrastructure.Extensions;
+using GRL.Persistence.Extensions;
 using Microsoft.AspNetCore.HttpOverrides;
 
 var builder = WebApplication.CreateBuilder(args);
 
 // Add services to the container.
+builder.Services.AddPersistence(builder.Configuration);
+builder.Services.AddInfrastructure();
 
 builder.Services.AddControllers();
-// Learn more about configuring Swagger/OpenAPI at https://aka.ms/aspnetcore/swashbuckle
 builder.Services.AddEndpointsApiExplorer();
 builder.Services.AddSwaggerGen();
 
 var app = builder.Build();
+
+app.ApplyMigrations();
 
 app.UseForwardedHeaders(new ForwardedHeadersOptions
 {
