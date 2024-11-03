@@ -17,4 +17,18 @@
       <ProjectReference Include="..\GRL.Persistence\GRL.Persistence.csproj" />
     </ItemGroup>
 
+    <!-- Ensure appsettings.Development.json is excluded from publish directory -->
+    <ItemGroup>
+        <Content Update="appsettings.Development.json">
+            <CopyToPublishDirectory>Never</CopyToPublishDirectory>
+        </Content>
+    </ItemGroup>
+
+    <!-- Additional target to remove the file before publishing if the above setting is ignored -->
+    <Target Name="ExcludeDevelopmentSettings" BeforeTargets="Publish">
+        <ItemGroup>
+            <Content Remove="appsettings.Development.json" />
+        </ItemGroup>
+    </Target>
+
 </Project>
