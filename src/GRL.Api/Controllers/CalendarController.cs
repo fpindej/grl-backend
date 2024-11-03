@@ -5,7 +5,7 @@ namespace GRL.Api.Controllers;
 
 using Microsoft.AspNetCore.Mvc;
 
-[Route("api/[controller]")]
+[Route("[controller]")]
 [ApiController]
 public class CalendarController : ControllerBase
 {

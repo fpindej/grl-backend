@@ -21,6 +21,7 @@ var app = builder.Build();
 
 app.ApplyMigrations();
 
+app.UsePathBase("/api");
 app.UseForwardedHeaders(new ForwardedHeadersOptions
 {
     ForwardedHeaders = ForwardedHeaders.XForwardedFor | ForwardedHeaders.XForwardedProto
