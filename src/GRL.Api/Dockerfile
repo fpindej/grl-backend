@@ -29,4 +29,4 @@ COPY --from=publish /app/publish .
 # Expose port 5001
 EXPOSE 5001
 
-ENTRYPOINT ["dotnet", "GRL.Api.dll"]
+ENTRYPOINT ["dotnet", "GRL.Api.dll", "--urls", "http://0.0.0.0:5001"]
