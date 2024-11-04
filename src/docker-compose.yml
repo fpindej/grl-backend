@@ -1,0 +1,9 @@
+services:
+  grl-api:
+    image: grl-api:<IMAGE_TAG>
+    container_name: grl-api
+    environment:
+      - ASPNETCORE_ENVIRONMENT=Production
+    ports:
+      - "5001:5001"
+    restart: unless-stopped
