@@ -12,9 +12,14 @@ internal class Driver : IEntityTypeConfiguration<Driver>
     public int Id { get; set; }
 
     [Required]
-    [MaxLength(100)]
-    [Description("Name of the driver.")]
-    public string Name { get; set; } = null!;
+    [MaxLength(30)]
+    [Description("First name of the driver.")]
+    public string FirstName { get; set; } = null!;
+
+    [Required]
+    [MaxLength(30)]
+    [Description("Last name of the driver.")]
+    public string LastName { get; set; } = null!;
 
     [Required]
     [Description("Accumulated penalty points.")]
@@ -34,9 +39,13 @@ internal class Driver : IEntityTypeConfiguration<Driver>
         builder.Property(d => d.Id)
             .ValueGeneratedOnAdd();
 
-        builder.Property(d => d.Name)
+        builder.Property(d => d.FirstName)
             .IsRequired()
-            .HasMaxLength(100);
+            .HasMaxLength(30);
+        
+        builder.Property(d => d.LastName)
+            .IsRequired()
+            .HasMaxLength(30);
 
         builder.Property(d => d.PenaltyPoints)
             .IsRequired();
