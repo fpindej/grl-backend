@@ -17,6 +17,7 @@ public static class ServiceCollectionExtensions
         });
 
         services.AddScoped<ICalendarRepository, CalendarRepository>();
+        services.AddScoped<IDriverRepository, DriverRepository>();
 
         return services;
     }
