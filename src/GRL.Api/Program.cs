@@ -1,3 +1,4 @@
+using GRL.Api.Middlewares;
 using Serilog;
 using GRL.Infrastructure.Extensions;
 using GRL.Persistence.Extensions;
@@ -41,6 +42,8 @@ if (app.Environment.IsDevelopment())
 }
 
 app.UseHttpsRedirection();
+
+app.UseMiddleware<ExceptionHandlingMiddleware>();
 
 app.UseAuthorization();
 
