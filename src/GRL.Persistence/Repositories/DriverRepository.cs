@@ -14,16 +14,24 @@ internal class DriverRepository : IDriverRepository
         _context = context;
     }
 
-    public async Task AddAsync(Driver driver)
+    public async Task<Driver> AddAsync(Driver driver)
     {
         var driverEntity = driver.ToModel();
-        await _context.Drivers.AddAsync(driverEntity);
+        _ = await _context.Drivers.AddAsync(driverEntity);
+        // Not ideal, consider creating a transaction layer in the future.
+        await SaveChangesAsync();
+
+        return driverEntity.ToDomain();
     }
 
-    public void Delete(Driver driver)
+    public async Task DeleteAsync(int id)
     {
-        var driverEntity = driver.ToModel();
-        _context.Drivers.Remove(driverEntity);
+        var existingDriver = await _context.Drivers.FindAsync(id);
+
+        if (existingDriver is null)
+            throw new KeyNotFoundException($"Driver with ID {id} not found.");
+        
+        _context.Drivers.Remove(existingDriver);
     }
 
     public async Task<IEnumerable<Driver>> GetAllAsync()
@@ -34,24 +42,32 @@ internal class DriverRepository : IDriverRepository
         return driverEntities.Select(e => e.ToDomain());
     }
 
-    public async Task<Driver?> GetByIdAsync(int id)
+    public async Task<Driver> GetByIdAsync(int id)
     {
-        var driverEntity = await _context.Drivers
+        var existingDriver = await _context.Drivers
             .FirstOrDefaultAsync(d => d.Id == id);
 
-        return driverEntity?.ToDomain();
+        if (existingDriver is null)
+        {
+            throw new KeyNotFoundException($"Driver with ID {id} not found.");
+        }
+
+        return existingDriver.ToDomain();
     }
 
-    public void Update(Driver driver)
+    public async Task<Driver> UpdateAsync(Driver driver)
     {
-        var existingDriver = _context.Drivers.Find(driver.Id);
+        var existingDriver = await _context.Drivers.FindAsync(driver.Id);
 
         if (existingDriver is null)
-            throw new Exception("Driver not found.");
+            throw new KeyNotFoundException($"Driver with ID {driver.Id} not found.");
 
         existingDriver.FirstName = driver.FirstName;
         existingDriver.LastName = driver.LastName;
+
+        return existingDriver.ToDomain();
     }
+
 
     public async Task SaveChangesAsync()
     {

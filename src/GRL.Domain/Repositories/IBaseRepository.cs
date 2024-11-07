@@ -11,7 +11,7 @@ public interface IBaseRepository<TEntity> where TEntity : class
     /// </summary>
     /// <param name="id">The unique identifier of the entity.</param>
     /// <returns>The entity if found; otherwise, null.</returns>
-    Task<TEntity?> GetByIdAsync(int id);
+    Task<TEntity> GetByIdAsync(int id);
 
     /// <summary>
     /// Retrieves all entities.
@@ -29,13 +29,14 @@ public interface IBaseRepository<TEntity> where TEntity : class
     /// Updates an existing entity in the repository.
     /// </summary>
     /// <param name="entity">The entity with updated values.</param>
-    void Update(TEntity entity);
+    Task<TEntity> UpdateAsync(TEntity entity);
+
 
     /// <summary>
     /// Deletes an entity from the repository.
     /// </summary>
     /// <param name="entity">ID of the entity to delete.</param>
-    Task<bool> DeleteAsync(int id);
+    Task DeleteAsync(int id);
 
     /// <summary>
     /// Persists all changes made in the repository to the data store.
