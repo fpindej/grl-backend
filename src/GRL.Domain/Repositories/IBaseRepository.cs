@@ -23,7 +23,7 @@ public interface IBaseRepository<TEntity> where TEntity : class
     /// Adds a new entity to the repository.
     /// </summary>
     /// <param name="entity">The entity to add.</param>
-    Task AddAsync(TEntity entity);
+    Task<TEntity> AddAsync(TEntity entity);
 
     /// <summary>
     /// Updates an existing entity in the repository.
@@ -34,8 +34,8 @@ public interface IBaseRepository<TEntity> where TEntity : class
     /// <summary>
     /// Deletes an entity from the repository.
     /// </summary>
-    /// <param name="entity">The entity to delete.</param>
-    void Delete(TEntity entity);
+    /// <param name="entity">ID of the entity to delete.</param>
+    Task<bool> DeleteAsync(int id);
 
     /// <summary>
     /// Persists all changes made in the repository to the data store.
