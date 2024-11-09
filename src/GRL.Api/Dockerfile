@@ -26,7 +26,6 @@ FROM base AS final
 WORKDIR /app
 COPY --from=publish /app/publish .
 
-# Expose port 5001
-EXPOSE 5001
+EXPOSE 8080
 
-ENTRYPOINT ["dotnet", "GRL.Api.dll", "--urls", "http://0.0.0.0:5001"]
+ENTRYPOINT ["dotnet", "GRL.Api.dll"]
