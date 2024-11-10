@@ -16,8 +16,8 @@ Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "host", "host", "{CE300B99-A
 EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "solution items", "solution items", "{06016FAE-F7FC-465B-B033-D288CE93D18C}"
 	ProjectSection(SolutionItems) = preProject
-		docker-compose.yml = docker-compose.yml
-		docker-compose-local.yml = docker-compose-local.yml
+		..\docker-compose.yml = ..\docker-compose.yml
+		..\docker-compose-local.yml = ..\docker-compose-local.yml
 	EndProjectSection
 EndProject
 Global

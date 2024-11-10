@@ -1,7 +1,7 @@
 services:
   grl-api:
     build:
-      context: ./GRL.Api
+      context: ./src/GRL.Api
       dockerfile: Dockerfile
     container_name: grl-api
     environment:
