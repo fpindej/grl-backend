@@ -12,6 +12,14 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "GRL.Infrastructure", "GRL.I
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "GRL.Logging", "GRL.Logging\GRL.Logging.csproj", "{81925801-AEE6-4119-B171-1B1C581BE2F5}"
 EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "host", "host", "{CE300B99-A89A-464E-9DD7-7070A872A506}"
+EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "solution items", "solution items", "{06016FAE-F7FC-465B-B033-D288CE93D18C}"
+	ProjectSection(SolutionItems) = preProject
+		docker-compose.yml = docker-compose.yml
+		docker-compose-local.yml = docker-compose-local.yml
+	EndProjectSection
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -42,5 +50,8 @@ Global
 		{81925801-AEE6-4119-B171-1B1C581BE2F5}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{81925801-AEE6-4119-B171-1B1C581BE2F5}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{81925801-AEE6-4119-B171-1B1C581BE2F5}.Release|Any CPU.Build.0 = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(NestedProjects) = preSolution
+		{BCAF895B-85DE-435F-8D33-DEF861FB6386} = {CE300B99-A89A-464E-9DD7-7070A872A506}
 	EndGlobalSection
 EndGlobal

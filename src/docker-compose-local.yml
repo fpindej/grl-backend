@@ -1,0 +1,38 @@
+services:
+  grl-api:
+    build:
+      context: ./GRL.Api
+      dockerfile: Dockerfile
+    container_name: grl-api
+    environment:
+      - ASPNETCORE_ENVIRONMENT=Development # change this if you want to test different env
+    ports:
+      - "5001:8080"
+    restart: unless-stopped
+    networks:
+      - grl-backend
+    depends_on:
+      - grl-db
+
+  grl-db:
+    image: postgres:15-alpine
+    container_name: grl-db
+    environment:
+      - POSTGRES_DB=grl
+      - POSTGRES_USER=admin
+      - POSTGRES_PASSWORD=pwd
+    volumes:
+      - grl_db_data:/var/lib/postgresql/data
+    ports:
+      - "5555:5432"   # Use localhost:5555 to connect from data sources
+    restart: unless-stopped
+    networks:
+      - grl-backend
+
+networks:
+  grl-backend:
+    driver: bridge
+
+volumes:
+  grl_db_data:
+    driver: local

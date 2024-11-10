@@ -69,6 +69,9 @@ try
     {
         Log.Debug("Development environment detected; enabling Developer Exception Page");
         app.UseDeveloperExceptionPage();
+        
+        Log.Debug("Apply migrations to local database");
+        app.ApplyMigrations();
     }
 
     Log.Debug("Enabling HTTPS redirection");
