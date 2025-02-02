@@ -27,6 +27,9 @@ FROM base AS final
 WORKDIR /app
 COPY --from=publish /app/publish .
 
+# Remove appsettings.*.json files
+RUN rm -f /app/appsettings.*.json
+
 EXPOSE 8080
 
 ENTRYPOINT ["dotnet", "GRL.Api.dll"]
