@@ -11,6 +11,7 @@ internal static class DataSeeder
         var seasons = SeedSeasons(modelBuilder, leagues);
         var circuits = SeedCircuits(modelBuilder);
         SeedRaces(modelBuilder, seasons, circuits);
+        SeedTeams(modelBuilder, leagues);
 
         return modelBuilder;
     }
@@ -255,5 +256,33 @@ internal static class DataSeeder
         }
 
         modelBuilder.Entity<Race>().HasData(races);
+    }
+
+    private static void SeedTeams(ModelBuilder modelBuilder, List<League> leagues)
+    {
+        var teams = new List<Team>();
+        var teamId = 1;
+
+        var teamNames = new List<string>
+        {
+            "Mercedes", "Red Bull", "Ferrari", "McLaren", "Alpine", "Racing Bulls", "Aston Martin", "Williams", "Kick Sauber", "Haas"
+        };
+
+        foreach (var league in leagues)
+        {
+            foreach (var teamName in teamNames)
+            {
+                var team = new Team
+                {
+                    Id = teamId++,
+                    Name = teamName,
+                    LeagueId = league.Id
+                };
+
+                teams.Add(team);
+            }
+        }
+
+        modelBuilder.Entity<Team>().HasData(teams);
     }
 }
