@@ -1,7 +1,6 @@
 using GRL.Api.Middlewares;
 using Serilog;
 using GRL.Infrastructure.Extensions;
-using GRL.Persistence.Extensions;
 using Microsoft.AspNetCore.HttpOverrides;
 
 var environmentName = Environment.GetEnvironmentVariable("ASPNETCORE_ENVIRONMENT") ?? Environments.Production;
@@ -69,9 +68,6 @@ try
     {
         Log.Debug("Development environment detected; enabling Developer Exception Page");
         app.UseDeveloperExceptionPage();
-        
-        Log.Debug("Apply migrations to local database");
-        app.ApplyMigrations();
     }
 
     Log.Debug("Enabling HTTPS redirection");
