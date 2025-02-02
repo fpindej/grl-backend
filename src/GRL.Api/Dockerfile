@@ -1,4 +1,4 @@
-﻿# Use the official ASP.NET Core runtime as a parent image
+# Use the official ASP.NET Core runtime as a parent image
 FROM mcr.microsoft.com/dotnet/aspnet:8.0 AS base
 WORKDIR /app
 
@@ -10,8 +10,9 @@ WORKDIR /src
 COPY ["GRL.Api/GRL.Api.csproj", "GRL.Api/"]
 RUN dotnet restore "GRL.Api/GRL.Api.csproj"
 
-# Copy the entire source code
+# Copy the entire source code, excluding the GRL.Migrations project
 COPY . .
+RUN rm -rf GRL.Migrations/
 
 # Build the application
 WORKDIR "/src/GRL.Api"
