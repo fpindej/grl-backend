@@ -13,6 +13,7 @@ RUN dotnet restore "GRL.Api/GRL.Api.csproj"
 # Copy the entire source code, excluding the GRL.Migrations project
 COPY . .
 RUN rm -rf GRL.Migrations/
+RUN rm -f GRL.Api/appsettings.Development.json
 
 # Build the application
 WORKDIR "/src/GRL.Api"
