@@ -6,6 +6,7 @@ services:
     container_name: grl-api
     environment:
       - ASPNETCORE_ENVIRONMENT=Development # change this if you want to test different env
+      - ConnectionStrings__Database=Server=grl-db;Database=grl;Username=admin;Password=pwd;
     ports:
       - "5001:8080"
     restart: unless-stopped
