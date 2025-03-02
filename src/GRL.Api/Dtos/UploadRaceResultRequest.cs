@@ -7,7 +7,9 @@ public class UploadRaceResultRequest
     [Required] 
     public IFormFile File { get; set; } = null!;
     
-    public string League { get; set; }
-    
-    public string Season { get; set; }
+    [Required]
+    public RequestLeague League { get; set; }
+
+    [Required]
+    public string Season { get; set; } = null!;
 }

@@ -1,4 +1,5 @@
 ﻿using System.ComponentModel;
+using GRL.Api.Dtos;
 using GRL.Application.Services;
 
 namespace GRL.Api.Controllers;
@@ -19,11 +20,11 @@ public class CalendarController : ControllerBase
     }
 
     [HttpGet("{league}/{season?}")]
-    public async Task<IActionResult> GetCalendar(string league = "Main", string season = "2024/25")
+    public async Task<IActionResult> GetCalendar(RequestLeague league = RequestLeague.Main, string season = "2024/25")
     {
         season = Uri.UnescapeDataString(season);
         _logger.LogInformation("Getting calendar for {leagueName} league in season {season}.", league, season);
-        var races = await _calendarService.GetCalendarAsync(league, season);
+        var races = await _calendarService.GetCalendarAsync(league.ToString(), season);
 
         if (!races.Any())
         {
@@ -33,7 +34,7 @@ public class CalendarController : ControllerBase
 
         var response = new CalendarResponse
         {
-            League = league,
+            League = league.ToString(),
             Season = season,
             Races = races.Select(r => new RaceDto
             {
