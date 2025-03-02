@@ -1,8 +1,10 @@
+using System.Text.Json.Serialization;
 using GRL.Api.Middlewares;
 using Serilog;
 using GRL.Infrastructure.Extensions;
 using GRL.Persistence.Extensions;
 using Microsoft.AspNetCore.HttpOverrides;
+using Microsoft.AspNetCore.Mvc;
 
 var environmentName = Environment.GetEnvironmentVariable("ASPNETCORE_ENVIRONMENT") ?? Environments.Production;
 
@@ -41,6 +43,11 @@ try
 
     Log.Debug("Adding Swagger for API documentation");
     builder.Services.AddSwaggerGen();
+    
+    builder.Services.Configure<JsonOptions>(options =>
+    {
+        options.JsonSerializerOptions.Converters.Add(new JsonStringEnumConverter());
+    });
 
     var app = builder.Build();
 
